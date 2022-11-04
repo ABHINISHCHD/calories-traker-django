@@ -1,0 +1,95 @@
+{% load static %}
+{% load mathfilters %}
+{% load humanize %}
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+    <body style="background-color: #f6fbf4;">
+        
+        <div class="container" style="text-align:center;margin-top:20px;">
+           <img src="{% static 'logo.png' %}">      
+           <br><br>
+           <form method="POST" style="display:flex;flex-direction:row;justify-content:center;">
+            {% csrf_token %}
+            <input placeholder="Search for calories of your food..." class="form-control" style="width:70%" name="food-item" >
+            <button class="btn btn-success" type="submit">Find Calories</button>            
+           </form>
+           <br>
+           <br>
+          {% if api %}
+          
+          {% if api == "oops there is an error" %}
+          <div class="alert alert-danger">Oh no! Something went wrong please try again later</div>
+          {% else %} 
+          <h1>{{api.0.name|capfirst}} has total of  {{api.0.calories}}</h1>
+           <br><br>
+           <div style="width:90%;min-height:50rem;margin: auto;background-color:  #ffffff;">
+            <div class="row">
+                <div class="col-6">
+                    <ul>
+                        <br><br>
+                        <p style="font-size:2rem;font-weight:bolder;">Nutritional Value</p>
+                        <div style="background-color:black;padding:5px 20px;width:90%;"><p style="color:#fafafafa;text-align: left;font-size:1.2rem;">Serving Per 100gm</p></div>
+                        <br>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Carbohydrate <p style="text-align:right;">{{api.0.carbohydrates_total_g}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Colestrol<p style="text-align:right;">{{api.0.cholesterol_mg}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Saturated fat<p style="text-align:right;">{{api.0.fat_saturated_g}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Total fat<p style="text-align:right;">{{api.0.fat_total_g}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Fiber content<p style="text-align:right;">{{api.0.fiber_g}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Potassium<p style="text-align:right;">{{api.0.potassium_mg}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Protien<p style="text-align:right;">{{api.0.protein_g}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Sodium<p style="text-align:right;">{{api.0.sodium_mg}}</p></li>
+                        <li style="list-style:none;margin-bottom:20px;border-bottom:1px solid #efefef;width:80%;text-align: left;">Sugar<p style="text-align:right;">{{api.0.sugar_g}}</p></li>
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <br><br>
+                    <p style="font-size:2rem;font-weight:bolder ;text-align: left;">Burn 223 calories you have to</p>
+                    <div style="display:flex;">
+                        <img src="{% static 'walking.png' %}">
+                        <div style="margin-left:30px">
+                            <p style="text-align:left;color:  #4b8673;font-weight:bold;font-size:larger;">Jog</p>
+                            <p style="font-weight:bolder;">You have to jog for <strong>{{api.0.calories|div:299|mul:60|floatformat:0}}</strong> min</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;">
+                        <img src="{% static 'yoga.png' %}">
+                        <div style="margin-left:30px">
+                            <p style="display:flex;color:  #4b8673;font-weight:bold;font-size:larger;">Do Power Yoga</p>
+                            <p style="font-weight:bolder;">You have to do Power Yoga for <strong>{{api.0.calories|div:223|mul:60|floatformat:0}}</strong> min</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;">
+                        <img src="{% static 'weightlifter.png' %}">
+                        <div style="margin-left:30px">
+                            <p style="display:flex;color:  #4b8673;font-weight:bold;font-size:larger;">Get a Gym Workout</p>
+                            <p style="font-weight:bolder;">You have to do  Gym Workout for <strong>{{api.0.calories|div:483|mul:60|floatformat:0}}</strong> min</p>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;">
+                        <img src="{% static 'walking.png' %}">
+                        <div style="margin-left:30px">
+                            <p style="display:flex;color:  #4b8673;font-weight:bold;font-size:larger;">Go For Brisk Walk</p>
+                            <p style="font-weight:bolder;">You have to do Brisk Walk for <strong>{{api.0.calories|div:294|mul:60|floatformat:0}}</strong> min</p>
+                        </div>
+                    </div>   
+                </div>
+            </div>
+           </div>
+           {% endif %}
+           {% else %}
+           <div class="alert alert-danger">Item You Are Searching Is Not Present In Our Database</div>
+
+           {% endif %}
+
+
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+        
+    </body>
+</html>
